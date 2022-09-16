@@ -79,4 +79,3 @@ function copy_message(string $chat_id, string $from_chat_id, int $message_id)
 
     send_request($params, $type);
 }
-print($var);
