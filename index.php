@@ -15,21 +15,24 @@ if ($update != null) {
     $message_id = $update["message"]["message_id"];
     $is_reply = $update["message"]["reply_to_message"] != null;
 
-    $text = json_encode($update);
-    
-    sendMessage($chat_id, $text);
-
     if ($chat_id == MAIN_CHAT_ID && $is_reply) {
         if (array_key_exists('forward_from', $update["message"])) {
             copy_message($update["message"]["forward_from"]['id'], MAIN_CHAT_ID, $message_id);
         } else {
-            $user_id = explode("\n", $update["message"]["reply_to_message"]["text"])[0];
-            copy_message($user_id, MAIN_CHAT_ID, $message_id);
-            // sendMessage(MAIN_CHAT_ID, $text);
+            try {
+                $user_id = explode("\n", $update["message"]["reply_to_message"]["text"])[0];
+            } catch (Exception) {
+                $user_id = null;
+            }
+            if ($user_id != null) {
+                copy_message($user_id, MAIN_CHAT_ID, $message_id);
+            } else {
+                sendMessage(MAIN_CHAT_ID, 'Помилка відповіді.');
+            }
         }
     } else {
         $message = forward_message(MAIN_CHAT_ID, $chat_id, $message_id);
-        $text = $chat_id . "\n" . 'REPLY TO THIS';
+        $text = $chat_id . "\n" . 'Відповісти на повідомлення';
         sendMessage(MAIN_CHAT_ID, $text);
     }
 }
