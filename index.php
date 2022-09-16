@@ -17,7 +17,7 @@ if ($update != null) {
 
     $text = json_encode($update);
     
-    sendMessage($chat_id, 'text');
+    sendMessage($chat_id, $text);
 
     if ($chat_id == MAIN_CHAT_ID && $is_reply) {
         if (array_key_exists('forward_from', $update["message"])) {
