@@ -8,6 +8,12 @@ define('MAIN_CHAT_ID', $main_chat_id);
 
 $update = json_decode(file_get_contents("php://input"), TRUE);
 
+print(BASIC_API_URL);
+print(MAIN_CHAT_ID);
+
+$chat_id = $update["message"]["chat"]["id"];
+sendMessage($chat_id, 'text');
+
 if ($update != null) {
     $chat_id = $update["message"]["chat"]["id"];
     $user_name = $update["message"]["chat"]["first_name"];
