@@ -2,6 +2,7 @@
 
 $token = getenv('BOT_TOKEN');
 $main_chat_id = getenv('MAIN_CHAT_ID');
+$blocked_users = getenv('BLOCKED_USERS');
 
 define('BASIC_API_URL', 'https://api.telegram.org/bot' . $token . '/');
 define('MAIN_CHAT_ID', $main_chat_id);
@@ -14,6 +15,11 @@ if ($update != null) {
     $message = $update["message"]["text"];
     $message_id = $update["message"]["message_id"];
     $is_reply = $update["message"]["reply_to_message"] != null;
+    
+    $blocked_arr = explode(',', $blocked_users);
+    $is_blocked = in_array($chat_id, $blocked_arr);
+    
+    if ($is_blocked) return;
 
     if ($chat_id == MAIN_CHAT_ID && $is_reply) {
         if (array_key_exists('forward_from', $update["message"])) {
